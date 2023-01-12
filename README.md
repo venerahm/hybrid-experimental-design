@@ -6,9 +6,8 @@ This file contains simulated data for the proximal analysis. It includes respond
 
 **id**: participant id
 
-**female**: binary sex (1: female; 0: male)
-
-**sex_centered**: binary sex (as defined above) mean centered
+**female**: binary sex (1: female; 0: male) //
+**sex_centered**: binary sex (as defined above) mean centered //
 **bmi_bl**: body mass index (bmi) at baseline in kg/m^2
 **bmi_bl_centered**: bmi mean centered
 **Z1**: initial intervention (1: app + coaching; -1: app alone)
