@@ -85,25 +85,25 @@ model_distal_table %>% kbl(caption = "Table 9: Results (Parameter Estimates) for
 
 ##### Distal Plot #####
 
-beta <- model_distal$coefficients;
-data_to_plot <- expand.grid(Z1=c(-1,+1),
+beta = model_distal$coefficients;
+data_to_plot = expand.grid(Z1=c(-1,+1),
                             Z2=c(-1,+1),
                             rate=c("mean","below","above"));
-data_to_plot$regimen <- paste("(",
+data_to_plot$regimen = paste("(",
                               data_to_plot$Z1,
                               ",",
                               data_to_plot$Z2,
                               ")",
                               sep="");
-the_mean <- round(mean(distal_nonresp$meanA),4)
-the_sd <- round(sd(distal_nonresp$meanAcentered),4);
-data_to_plot$meanAcentered[which(data_to_plot$rate=="mean")] <- 0;
-data_to_plot$meanAcentered[which(data_to_plot$rate=="above")] <- 0 + the_sd;
-data_to_plot$meanAcentered[which(data_to_plot$rate=="below")] <- 0 - the_sd;
-data_to_plot$Z1 <- as.integer(data_to_plot$Z1);
-data_to_plot$Z2 <- as.integer(data_to_plot$Z2); 
-beta <- model_distal$coefficients;
-data_to_plot$fitted_value <- beta["(Intercept)"] + 
+the_mean = round(mean(distal_nonresp$meanA),4)
+the_sd = round(sd(distal_nonresp$meanAcentered),4);
+data_to_plot$meanAcentered[which(data_to_plot$rate=="mean")] = 0;
+data_to_plot$meanAcentered[which(data_to_plot$rate=="above")] = 0 + the_sd;
+data_to_plot$meanAcentered[which(data_to_plot$rate=="below")] = 0 - the_sd;
+data_to_plot$Z1 = as.integer(data_to_plot$Z1);
+data_to_plot$Z2 = as.integer(data_to_plot$Z2); 
+beta = model_distal$coefficients;
+data_to_plot$fitted_value = beta["(Intercept)"] + 
   beta["Z1"]*data_to_plot$Z1 + 
   beta["Z2"]*data_to_plot$Z2 + 
   beta["meanAcentered"]*data_to_plot$meanAcentered + 
@@ -112,7 +112,8 @@ data_to_plot$fitted_value <- beta["(Intercept)"] +
   beta["Z2:meanAcentered"]*data_to_plot$Z2*data_to_plot$meanAcentered + 
   beta["Z1:Z2:meanAcentered"]*data_to_plot$Z1*data_to_plot$Z2*data_to_plot$meanAcentered ;
 print(data_to_plot);
-plot1 <- ggplot(data_to_plot, 
+
+plot1 = ggplot(data_to_plot, 
                 aes(x = factor(regimen),y=fitted_value)) +
   geom_point(aes(y = fitted_value,
                  colour=as.factor(rate),
