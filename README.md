@@ -25,7 +25,7 @@ This file contains simulated data for the distal analysis. It includes only resp
 - **id**: participant id
 - **female**: binary sex (1: female; 0: male)
 - **sex_centered**: binary sex (as defined above) mean centered
-- **bmi_bl**: body mass index (bmi) at baseline in kg/m^2
+- **bmi_bl**: body mass index (bmi) at baseline in lbs/in^2
 - **bmi_bl_centered**: bmi mean centered
 - **meanAcentered**: average number of interventions received per participant, mean centered
 - **Z1**: initial intervention (1: app + coaching; -1: app alone)
