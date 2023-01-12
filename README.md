@@ -5,7 +5,9 @@
 This file contains simulated data for the proximal analysis. It includes responders and nonresponders. The variables included are detailed below:
 
 **id**: participant id
+
 **female**: binary sex (1: female; 0: male)
+
 **sex_centered**: binary sex (as defined above) mean centered
 **bmi_bl**: body mass index (bmi) at baseline in kg/m^2
 **bmi_bl_centered**: bmi mean centered
