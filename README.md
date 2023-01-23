@@ -36,7 +36,7 @@ This file contains simulated data for the distal analysis. It includes only nonr
 
 This file contains code for the analysis of proximal and distal effects in a hybrid SMART-MRT design. It pulls from the file "Hanna_Estimator_Resp.R" to perform the proximal analysis and uses the two datasets "sim_data_for_proximal.R" and "sim_data_for_distal_responders_only.R".
 
-### Estimator.R
+### Estimator_For_Proximal_Analysis.R
 
 This file contains code for conducting the proximal effect analysis with a binary proximal outcome. The code is based on Qian et al., 2021.
 Qian, T., Yoo, H., Klasnja, P., Almirall, D., & Murphy, S. A. (2021). Estimating time-varying causal excursion effects in mobile health with binary outcomes. Biometrika, 108(3), 507-527.
