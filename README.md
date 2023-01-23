@@ -18,9 +18,9 @@ This file contains simulated data for the proximal analysis. It includes respond
 - **outcome**: binary variable representing food tracking within 12 hours of microrandomization (1: food tracking occurred; 0: food tracking did not occur)
 - **prob**: probability of intervention with microrandomization (2/3: nonresponders; 0: responders)
 
-### sim_data_for_distal_responders_only.R
+### sim_data_for_distal_nonresponders_only.R
 
-This file contains simulated data for the distal analysis. It includes only responders. The variables included are detailed below:
+This file contains simulated data for the distal analysis. It includes only nonresponders. The variables included are detailed below:
 
 - **id**: participant id
 - **female**: binary sex (1: female; 0: male)
@@ -36,8 +36,9 @@ This file contains simulated data for the distal analysis. It includes only resp
 
 This file contains code for the analysis of proximal and distal effects in a hybrid SMART-MRT design. It pulls from the file "Hanna_Estimator_Resp.R" to perform the proximal analysis and uses the two datasets "sim_data_for_proximal.R" and "sim_data_for_distal_responders_only.R".
 
-### Hanna_Estimator_Resp.R
+### Estimator.R
 
-This file contains code for the estimation equation for a binary outcome used for the proximal effect analysis. It has been adapted from Tianchen Qian and Jamie Yap.
+This file contains code for conducting the proximal effect analysis with a binary proximal outcome. The code is based on Qian et al., 2021.
+Qian, T., Yoo, H., Klasnja, P., Almirall, D., & Murphy, S. A. (2021). Estimating time-varying causal excursion effects in mobile health with binary outcomes. Biometrika, 108(3), 507-527.
 
 
