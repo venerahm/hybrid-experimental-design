@@ -5,32 +5,28 @@
 This file contains simulated data for the proximal analysis. It includes responders and nonresponders. The variables included are detailed below:
 
 - **id**: participant id
-- **female**: binary sex (1: female; 0: male) 
-- **sex_centered**: binary sex (as defined above) mean centered 
-- **bmi_bl**: body mass index (bmi) at baseline in kg/m^2
-- **bmi_bl_centered**: bmi mean centered
+- **Biological Sex (Mean Centered)**: binary sex ((1: female; 0: male) mean centered 
+- **Baseline BMI (Mean Centered)**: body mass index (bmi) at baseline in kg/m^2 mean centered
 - **Z1**: initial intervention (1: app + coaching; -1: app alone)
-- **R**: response status (1: responder; 0: nonresponder)
-- **nonresponse_week**: week classified as nonresponder (0: responders; 2,4,8: nonresponders)
+- **Responder**: response status (1: responder; 0: nonresponder)
+- **Week Classified as Nonresponder**: week classified as nonresponder (0: responders; 2,4,8: nonresponders)
 - **Z2**: secondary intervention (1: vigorous step-up; -1: moderate step-up)
 - **A**: intervention based on microrandomization (1: message sent, 0: message not sent)
-- **days_nonrespond**: days since entering the MRT (vary based on nonresponse_week)
-- **outcome**: binary variable representing food tracking within 12 hours of microrandomization (1: food tracking occurred; 0: food tracking did not occur)
-- **prob**: probability of intervention with microrandomization (2/3: nonresponders; 0: responders)
+- **Days Since Classified as Nonresponder**: days since entering the MRT (vary based on nonresponse_week)
+- **Outcome**: binary variable representing food tracking within 12 hours of microrandomization (1: food tracking occurred; 0: food tracking did not occur)
+- **Probability of Microrandomization**: probability of intervention with microrandomization (2/3: nonresponders; 0: responders)
 
 ### sim_data_for_distal_nonresponders_only.R
 
 This file contains simulated data for the distal analysis. It includes only nonresponders. The variables included are detailed below:
 
 - **id**: participant id
-- **female**: binary sex (1: female; 0: male)
-- **sex_centered**: binary sex (as defined above) mean centered
-- **bmi_bl**: body mass index (bmi) at baseline in lbs/in^2
-- **bmi_bl_centered**: bmi mean centered
-- **meanAcentered**: average number of interventions received per participant, mean centered
+- **Biological Sex (Mean Centered)**: binary sex ((1: female; 0: male) mean centered 
+- **Baseline BMI (Mean Centered)**: body mass index (bmi) at baseline in kg/m^2 mean centered
+- **A (Mean Centered)**: average number of interventions received per participant, mean centered
 - **Z1**: initial intervention (1: app + coaching; -1: app alone)
 - **Z2**: secondary intervention (1: vigorous step-up; -1: moderate step-up)
-- **weight_change_distal**: difference in weight from baseline to 6 months (baseline minus 6 months)
+- **Outcome**: difference in weight from baseline to 6 months (baseline minus 6 months)
 
 ### Simulated_Data_Analysis.R
 
