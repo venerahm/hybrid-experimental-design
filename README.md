@@ -32,9 +32,9 @@ This file contains simulated data for the distal analysis. It includes only nonr
 - **Z2**: secondary intervention (1: vigorous step-up; -1: moderate step-up)
 - **weight_change_distal**: difference in weight from baseline to 6 months (baseline minus 6 months)
 
-### Simulated_Data_Analysis_Final.R
+### Simulated_Data_Analysis.R
 
-This file contains code for the analysis of proximal and distal effects in a hybrid SMART-MRT design. It pulls from the file "Hanna_Estimator_Resp.R" to perform the proximal analysis and uses the two datasets "sim_data_for_proximal.R" and "sim_data_for_distal_responders_only.R".
+This file contains code for the analysis of proximal and distal effects in a hybrid SMART-MRT design. It pulls from the file "Estimator_For_Proximal_Analysis.R" to perform the proximal analysis and uses the two datasets "sim_data_for_proximal.R" and "sim_data_for_distal_responders_only.R".
 
 ### Estimator_For_Proximal_Analysis.R
 
