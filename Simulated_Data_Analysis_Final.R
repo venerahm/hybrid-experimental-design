@@ -17,18 +17,28 @@ path_simulated_data = Sys.getenv("path_simulated_data")
 proximal_w_resp = read.csv(file.path(path_simulated_data, "sim_data_for_proximal.R"))
 distal_nonresp = read.csv(file.path(path_simulated_data, "sim_data_for_distal_responders_only.R"))
 
+# edit names
+names(proximal_w_resp) = c("id", "Biological Sex (Mean Centered)", "Baseline BMI (Mean Centered)", "Z1", "Responder", "Week Classified as Nonresponder", "Z2", "A", "Days Since Classified as Nonresponder", "Outcome", "Probability of Microrandomization")
+names(distal_nonresp) = c("id", "Biological Sex (Mean Centered)", "Baseline BMI (Mean Centered)", "Mean A", "A (Mean Centered)", "Z1", "Z2", "Outcome")
+
 # Source for estimator
 path_estimators = Sys.getenv("path_estimators")
-source(file.path(path_estimators, "Hanna_Estimator_resp.R"))
+source(file.path(path_estimators, "Estimator_For_Proximal_Analysis.R"))
 
 #####
 # Proximal Model
 #####
-
+# Treat ID as a nominal variable
 proximal_w_resp$id = factor(proximal_w_resp$id)
+# Add variable for interaction of Z1 and Z2
+proximal_w_resp1 = proximal_w_resp %>%
+  mutate(Z1_Z2 = Z1*Z2) 
 
-# Control variable regression
-resp_model_control = geeglm(outcome ~ Z1 + Z2 + nonresponse_week + sex_centered + days_nonrespond + bmi_bl, data = proximal_w_resp, id = id)
+# Control variable regression for proximal model
+resp_model_control = geeglm(Outcome ~ Z1 + Z2 + `Week Classified as Nonresponder` + 
+                               `Biological Sex (Mean Centered)` + `Days Since Classified as Nonresponder` + `Baseline BMI (Mean Centered)`, 
+                             data = proximal_w_resp, id = id)
+print(summary(resp_model_control))
 
 # Control variable output table
 resp_model_control_table = data.table(tidy(resp_model_control))
@@ -36,33 +46,41 @@ cilow = data.table(resp_model_control_table$estimate - 1.96 * resp_model_control
 cihigh = data.table(resp_model_control_table$estimate + 1.96 * resp_model_control_table$std.error)
 resp_model_control_table = data.frame(cbind(resp_model_control_table[,2:3], cilow, cihigh, resp_model_control_table[,4:5]))
 names(resp_model_control_table) = c("Estimate", "Robust SE", "95% CI LL", "95% CI UL", "Wald", "Pr>|W|")
-rownames(resp_model_control_table) = c("Intercept", "$Z_{i1}$", "$Z_{i2}$", "Week Rerandomized", "Sex", "Days Since Rerandomization", "Baseline BMI")
+rownames(resp_model_control_table) = c("Intercept", "$Z_{i1}$", "$Z_{i2}$", "Week Rerandomized", "Sex", "Days Since Rerandomization", "Baseline BMI (Mean Centered)")
 resp_model_control_table = round(resp_model_control_table, digits = 4)
-resp_model_control_table %>% kbl(caption = "Table 8.1: Control Variables") %>% kable_classic(full_width = F, html_font = "Times New Roman") %>% footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit")
-
-# Add variable for interaction of Z1 and Z2
-proximal_w_resp1 = proximal_w_resp %>%
-  mutate(Z1_Z2 = Z1*Z2) 
+print(resp_model_control_table)
+resp_model_control_table %>% 
+  kbl(caption = "Table 8.1: Control Variables") %>%
+  kable_classic(full_width = F, html_font = "Times New Roman") %>%
+  footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit")
 
 # Proximal model
 proximal = binary_outcome_moderated_effect_resp(
   dta = proximal_w_resp1,
-  control_var = c("Z1", "Z2", "nonresponse_week", "sex_centered", "days_nonrespond", "bmi_bl_centered"),
+  control_var = c("Z1", "Z2", "Week Classified as Nonresponder", "Biological Sex (Mean Centered)", 
+                  "Days Since Classified as Nonresponder", "Baseline BMI (Mean Centered)"),
   moderator = c("Z1", "Z2", "Z1_Z2"),
   id_var = "id",
-  day_var = "days_nonrespond",
+  day_var = "Days Since Classified as Nonresponder",
   trt_var = "A",
-  outcome_var = "outcome",
+  outcome_var = "Outcome",
   avail_var = NULL,
-  prob_treatment = "prob",
+  prob_treatment = "Probability of Microrandomization",
   significance_level = 0.05)
 
 # Proximal model output table
 proximal_model = as.data.frame(proximal[1])
-names(proximal_model) = c("Estimate", "Robust SE", "95% CI LL", "95% CI UL", "T", "Pr>|T|")
-rownames(proximal_model) = c("Intercept", "$Z_{i1}$", "$Z_{i2}$", "$Z_{i1} Z_{i2}$")
+names(proximal_model) = c("Estimate", "Robust SE", "95% CI LL", "95% CI UL", "t", "Pr>|t|")
+rownames(proximal_model) = c("$A_{it}$", 
+                              "$A_{it} Z_{i1}$",
+                              "$A_{it} Z_{i2}$", 
+                              "$A_{it} Z_{i1} Z_{i2}$")
 proximal_round = round(proximal_model, digits = 4)
-proximal_round %>% kbl(caption = "Table 8.2: Proximal Model Results") %>% kable_classic(full_width = F, html_font = "Times New Roman") %>% footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit")
+print(proximal_round)
+proximal_round %>% 
+  kbl(caption = "Table 8.2: Proximal Model Results") %>%
+  kable_classic(full_width = F, html_font = "Times New Roman") %>% 
+  footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit")
 
 #####
 # Distal Model
@@ -71,7 +89,10 @@ proximal_round %>% kbl(caption = "Table 8.2: Proximal Model Results") %>% kable_
 ##### Distal Model : nonresponders only #####
 
 # Distal model 
-model_distal = geeglm(weight_change_distal ~ Z1 * Z2 * meanAcentered + sex_centered + bmi_bl_centered, data = distal_nonresp, id = id)
+model_distal = geeglm(Outcome ~ Z1 * Z2 * `A (Mean Centered)` + 
+                         `Biological Sex (Mean Centered)` + `Baseline BMI (Mean Centered)`, 
+                       data = distal_nonresp, id = id)
+print(summary(model_distal))
 
 # Distal model output table
 model_distal_table = data.table(tidy(model_distal))
@@ -79,9 +100,12 @@ cilow = data.table(model_distal_table$estimate - 1.96 * model_distal_table$std.e
 cihigh = data.table(model_distal_table$estimate + 1.96 * model_distal_table$std.error)
 model_distal_table = data.frame(cbind(model_distal_table[,2:3], cilow, cihigh, model_distal_table[,4:5]))
 names(model_distal_table) = c("Estimate", "Robust SE", "95% CI LL", "95% CI UL", "Wald", "Pr>|W|")
-rownames(model_distal_table) = c("Intercept", "$Z_{i1}$", "$Z_{i2}$", "$\\bar{A_i}^{(2)}$", "Sex", "Baseline BMI", "$Z_{i1} Z_{i2}$", "$Z_{i1} \\bar{A_i}^{(2)}$", "$Z_{i2}\\bar{A_i}^{(2)}$", "$Z_{i1}Z_{i2}\\bar{A_i}^{(2)}$")
+rownames(model_distal_table) = c("Intercept", "$Z_{i1}$", "$Z_{i2}$", "$\\bar{A_i}^{(2)}$", "Biological Sex (Mean Centered)", "Baseline BMI (Mean Centered)", "$Z_{i1} Z_{i2}$", "$Z_{i1} \\bar{A_i}^{(2)}$", "$Z_{i2}\\bar{A_i}^{(2)}$", "$Z_{i1}Z_{i2}\\bar{A_i}^{(2)}$")
 model_distal_table = round(model_distal_table, digits = 4)
-model_distal_table %>% kbl(caption = "Table 9: Results (Parameter Estimates) for Distal Model") %>% kable_classic(full_width = F, html_font = "Times New Roman") %>% footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit; all covariates centered")
+model_distal_table %>% 
+  kbl(caption = "Table 9: Results (Parameter Estimates) for Distal Model") %>% 
+  kable_classic(full_width = F, html_font = "Times New Roman") %>% 
+  footnote(general = "CI: confidence interval; LL: lower limit; UL: upper limit; all covariates centered")
 
 ##### Distal Plot #####
 
@@ -95,26 +119,26 @@ data_to_plot$regimen = paste("(",
                               data_to_plot$Z2,
                               ")",
                               sep="");
-the_mean = round(mean(distal_nonresp$meanA),4)
-the_sd = round(sd(distal_nonresp$meanAcentered),4);
-data_to_plot$meanAcentered[which(data_to_plot$rate=="mean")] = 0;
-data_to_plot$meanAcentered[which(data_to_plot$rate=="above")] = 0 + the_sd;
-data_to_plot$meanAcentered[which(data_to_plot$rate=="below")] = 0 - the_sd;
+the_mean = round(mean(distal_nonresp$`Mean A`),4)
+the_sd = round(sd(distal_nonresp$`A (Mean Centered)`),4);
+data_to_plot$`A (Mean Centered)`[which(data_to_plot$rate=="mean")] = 0;
+data_to_plot$`A (Mean Centered)`[which(data_to_plot$rate=="above")] = 0 + the_sd;
+data_to_plot$`A (Mean Centered)`[which(data_to_plot$rate=="below")] = 0 - the_sd;
 data_to_plot$Z1 = as.integer(data_to_plot$Z1);
 data_to_plot$Z2 = as.integer(data_to_plot$Z2); 
 beta = model_distal$coefficients;
 data_to_plot$fitted_value = beta["(Intercept)"] + 
   beta["Z1"]*data_to_plot$Z1 + 
   beta["Z2"]*data_to_plot$Z2 + 
-  beta["meanAcentered"]*data_to_plot$meanAcentered + 
+  beta["`A (Mean Centered)`"]*data_to_plot$`A (Mean Centered)` + 
   beta["Z1:Z2"]*data_to_plot$Z1*data_to_plot$Z2 + 
-  beta["Z1:meanAcentered"]*data_to_plot$Z1*data_to_plot$meanAcentered + 
-  beta["Z2:meanAcentered"]*data_to_plot$Z2*data_to_plot$meanAcentered + 
-  beta["Z1:Z2:meanAcentered"]*data_to_plot$Z1*data_to_plot$Z2*data_to_plot$meanAcentered ;
+  beta["Z1:`A (Mean Centered)`"]*data_to_plot$Z1*data_to_plot$`A (Mean Centered)` + 
+  beta["Z2:`A (Mean Centered)`"]*data_to_plot$Z2*data_to_plot$`A (Mean Centered)` + 
+  beta["Z1:Z2:`A (Mean Centered)`"]*data_to_plot$Z1*data_to_plot$Z2*data_to_plot$`A (Mean Centered)` ;
 print(data_to_plot);
 
 plot1 = ggplot(data_to_plot, 
-                aes(x = factor(regimen),y=fitted_value)) +
+               aes(x = factor(regimen),y=fitted_value)) +
   geom_point(aes(y = fitted_value,
                  colour=as.factor(rate),
                  shape=as.factor(rate)),
