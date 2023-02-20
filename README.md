@@ -1,5 +1,8 @@
 # repository-hybrid-trials-QKWHF6125W
 
+This code accompanies the following manuscript on preprint server ArXiV:
+[Design of Experiments with Sequential Randomizations on Multiple Timescales: The Hybrid Experimental Design (Nahum-Shani et al. 2023)](https://arxiv.org/abs/2302.09046)
+
 ### sim_data_for_proximal.R
 
 This file contains simulated data for the proximal analysis. It includes responders and nonresponders. The variables included are detailed below:
