@@ -1,4 +1,4 @@
-# repository-hybrid-trials-QKWHF6125W
+# About the code in this repository
 
 This code accompanies the following manuscript on preprint server ArXiV:
 
@@ -9,7 +9,7 @@ This code accompanies the following manuscript on preprint server ArXiV:
 This file contains simulated data for the proximal analysis. It includes responders and nonresponders. The variables included are detailed below:
 
 - **id**: participant id
-- **Biological Sex (Mean Centered)**: binary sex ((1: female; 0: male) mean centered 
+- **Biological Sex (Mean Centered)**: binary sex (1: female; 0: male) mean centered 
 - **Baseline BMI (Mean Centered)**: body mass index (bmi) at baseline in kg/m^2 mean centered
 - **Z1**: initial intervention (1: app + coaching; -1: app alone)
 - **Responder**: response status (1: responder; 0: nonresponder)
