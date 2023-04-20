@@ -4,7 +4,7 @@ This code accompanies the following manuscript on preprint server ArXiV:
 
 [Design of Experiments with Sequential Randomizations on Multiple Timescales: The Hybrid Experimental Design (Nahum-Shani et al. 2023)](https://arxiv.org/abs/2302.09046)
 
-### sim_data_for_proximal.R
+### sim_data_for_proximal.csv
 
 This file contains simulated data for the proximal analysis. It includes responders and nonresponders. The variables included are detailed below:
 
@@ -20,7 +20,7 @@ This file contains simulated data for the proximal analysis. It includes respond
 - **Outcome**: binary variable representing food tracking within 12 hours of microrandomization (1: food tracking occurred; 0: food tracking did not occur)
 - **Probability of Microrandomization**: probability of intervention with microrandomization (2/3: nonresponders; 0: responders)
 
-### sim_data_for_distal_nonresponders_only.R
+### sim_data_for_distal_nonresponders_only.csv
 
 This file contains simulated data for the distal analysis. It includes only nonresponders. The variables included are detailed below:
 
