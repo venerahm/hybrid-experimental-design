@@ -13,17 +13,15 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load("tidyverse", "rootSolve", "kableExtra", "knitr", "geepack", "data.table")
 
 # Source for simulated data
-path_simulated_data = Sys.getenv("path_simulated_data")
-proximal_w_resp = read.csv(file.path(path_simulated_data, "sim_data_for_proximal.R"))
-distal_nonresp = read.csv(file.path(path_simulated_data, "sim_data_for_distal_responders_only.R"))
+proximal_w_resp = read.csv("sim_data_for_proximal.csv")
+distal_nonresp = read.csv("sim_data_for_distal_nonresponders_only.csv")
 
 # edit names
 names(proximal_w_resp) = c("id", "Biological Sex (Mean Centered)", "Baseline BMI (Mean Centered)", "Z1", "Responder", "Week Classified as Nonresponder", "Z2", "A", "Days Since Classified as Nonresponder", "Outcome", "Probability of Microrandomization")
 names(distal_nonresp) = c("id", "Biological Sex (Mean Centered)", "Baseline BMI (Mean Centered)", "Mean A", "A (Mean Centered)", "Z1", "Z2", "Outcome")
 
 # Source for estimator
-path_estimators = Sys.getenv("path_estimators")
-source(file.path(path_estimators, "Estimator_For_Proximal_Analysis.R"))
+source("Estimator_For_Proximal_Analysis.R")
 
 #####
 # Proximal Model
